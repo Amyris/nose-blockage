@@ -1,7 +1,5 @@
-try:
-    import httplib
-except ImportError:
-    import http.client as httplib
+from six.moves import http_client as httplib
+from six import string_types
 import logging
 import os
 import smtplib
@@ -55,7 +53,7 @@ class NoseBlockage(Plugin):
         http_whitelist = self.whitelists['http']
 
         def whitelisted(self, host, *args, **kwargs):
-            if isinstance(host, basestring) and host not in http_whitelist:
+            if isinstance(host, string_types) and host not in http_whitelist:
                 log.warning('Denied HTTP connection to: %s' % host)
                 raise MockHTTPCall(host)
             log.debug('Allowed HTTP connection to: %s' % host)
@@ -72,7 +70,7 @@ class NoseBlockage(Plugin):
         smtp_whitelist = self.whitelists['smtp']
 
         def whitelisted(self, host, *args, **kwargs):
-            if isinstance(host, basestring) and host not in smtp_whitelist:
+            if isinstance(host, string_types) and host not in http_whitelist:
                 log.warning('Denied SMTP connection to: %s' % host)
                 raise MockSMTPCall(host)
             log.debug('Allowed SMTP connection to: %s' % host)
